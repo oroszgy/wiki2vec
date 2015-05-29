@@ -103,7 +103,6 @@ class Word2VecCorpus(pathToReadableWiki:String, redirectStore:RedirectStore, pat
     }
   }
 
-
   /*
   * Dumb Tokenization.
   * Replace this for something smarter
@@ -132,8 +131,21 @@ class Word2VecCorpus(pathToReadableWiki:String, redirectStore:RedirectStore, pat
   }
 
 
+  private def addFakeLinks(titleArticleText:RDD[(String, String)]): RDD[(String, String)]={
+
+    titleArticleText.map{
+
+      case (title:String, text:String) =>  {
+          (title, """[[%s|%s]] """.format(title, title) + text )
+      }
+    }
+
+  }
+
+
   def getWord2vecCorpus(): Unit ={
-    val replacedLinks = replaceLinksForIds(wikiTitleTexts, redirectStore)
+    val textWithFakeLinks = addFakeLinks(wikiTitleTexts)
+    val replacedLinks = replaceLinksForIds(textWithFakeLinks, redirectStore)
     val cleanedArticles = cleanArticles(replacedLinks)
     val tokenizedArticles = tokenize(cleanedArticles)
     tokenizedArticles.saveAsTextFile(pathToOutput)
