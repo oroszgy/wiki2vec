@@ -83,7 +83,7 @@ echo "Creating Readable Wiki.."
 
 # Create Wiki2Vec Corpus
 echo "Creating Word2vec Corpus"
-$SPARK_PATH/bin/spark-submit --driver-memory 20g --class org.idio.wikipedia.word2vec.Word2VecCorpus $JAR_PATH $READABLEWIKI $BASE_DIR/fakePathToRedirect/file.nt $SPLIT_OUTPUT_CORPUS $STEMMERNAME
+$SPARK_PATH/bin/spark-submit --driver-memory 15g --num-executors 4 --class org.idio.wikipedia.word2vec.Word2VecCorpus $JAR_PATH $READABLEWIKI $BASE_DIR/fakePathToRedirect/file.nt $SPLIT_OUTPUT_CORPUS $STEMMERNAME
 
 # joining split files
 echo "Joining corpus.."
